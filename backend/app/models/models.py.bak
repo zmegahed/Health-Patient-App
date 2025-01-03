@@ -1,0 +1,33 @@
+from sqlalchemy import Column, Integer, String, DateTime, Date, ForeignKey, Text
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.sql import func
+
+Base = declarative_base()
+
+class Patient(Base):
+    __tablename__ = "patients"
+
+    id = Column(Integer, primary_key=True, index=True)
+    first_name = Column(String(100), nullable=False)
+    last_name = Column(String(100), nullable=False)
+    date_of_birth = Column(Date, nullable=False)
+    gender = Column(String(50))
+    blood_type = Column(String(10))
+    contact_number = Column(String(20))
+    email = Column(String(255))
+    emergency_contact = Column(String(255))
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+class MedicalEvent(Base):
+    __tablename__ = "medical_events"
+
+    id = Column(Integer, primary_key=True, index=True)
+    patient_id = Column(Integer, ForeignKey("patients.id"))
+    event_type = Column(String(100), nullable=False)
+    event_date = Column(Date, nullable=False)
+    description = Column(Text)
+    severity = Column(String(50))
+    status = Column(String(50))
+    provider = Column(String(255))
+    location = Column(String(255))
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
